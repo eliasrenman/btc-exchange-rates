@@ -1,0 +1,15 @@
+apiVersion: v2
+name: blockchain-exchange-rates
+description: A Helm chart for deploying PostgreSQL, RabbitMQ, and local services for getting the latest information about blockchain exchange rates.
+version: 0.1.0
+appVersion: "1.0"
+# dependencies:
+# - name: service1-chart
+#   version: "0.1.0"
+#   repository: "file://../../apps/service1/infra/k8s/service1-chart"
+# - name: service2-chart
+#   version: "0.1.0"
+#   repository: "file://../../apps/service2/infra/k8s/service2-chart"
+# - name: service3-chart
+#   version: "0.1.0"
+#   repository: "file://../../apps/service3/infra/k8s/service3-chart"

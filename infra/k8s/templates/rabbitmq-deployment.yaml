@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+        - name: rabbitmq
+          image: "{{ .Values.rabbitmq.image }}"
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              value: "{{ .Values.rabbitmq.username }}"
+            - name: RABBITMQ_DEFAULT_PASS
+              value: "{{ .Values.rabbitmq.password }}"
+          ports:
+            - containerPort: {{ .Values.rabbitmq.service.port }}
+            - containerPort: {{ .Values.rabbitmq.service.managementPort }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+spec:
+  type: ClusterIP
+  ports:
+    - name: connection-port
+      port: {{ .Values.rabbitmq.service.port }}
+      targetPort: {{ .Values.rabbitmq.service.port }}
+    - name: management-port
+      port: {{ .Values.rabbitmq.service.managementPort }}
+      targetPort: {{ .Values.rabbitmq.service.managementPort }}
+  selector:
+    app: rabbitmq
+---
+
+{{- if .Values.rabbitmq.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rabbitmq
+  annotations:
+    {{- range $key, $value := .Values.rabbitmq.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- range .Values.rabbitmq.ingress.hosts }}
+    - host: {{ .host }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
+            backend:
+              service:
+                name: rabbitmq
+                port:
+                  number: {{ $.Values.rabbitmq.service.managementPort }}
+          {{- end }}
+    {{- end }}
+  {{- if .Values.rabbitmq.ingress.tls }}
+  tls:
+    {{- range .Values.rabbitmq.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+{{- end }}
