@@ -1,33 +1,30 @@
-postgresql:
-  image: "postgres:13"
-  username: "admin"
-  password: "${POSTGRES_PASSWORD}"
-  database: "mydb"
-  service:
-    port: 5432
+global:
+  postgresql:
+    image: "postgres:13"
+    username: "admin"
+    password: "${POSTGRES_PASSWORD}"
+    database: "mydb"
+    service:
+      port: 5432
 
-rabbitmq:
-  image: "rabbitmq:3-management"
-  username: "${RABBITMQ_USERNAME}"
-  password: "${RABBITMQ_PASSWORD}"
-  service:
-    port: 5672
-    managementPort: 15672
-  ingress:
-    enabled: true
-    annotations: {}
-    hosts:
-      - host: rabbitmq.local
-        paths:
-          - path: /
-            pathType: Prefix
-    tls: []
-# service1:
-#   image: myservice1:latest
-#   replicas: 1
-#   service:
-#     port: 8080
-
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    username: "${RABBITMQ_USERNAME}"
+    password: "${RABBITMQ_PASSWORD}"
+    service:
+      port: 5672
+      managementPort: 15672
+    ingress:
+      enabled: true
+      annotations: {}
+      hosts:
+        - host: rabbitmq.local
+          paths:
+            - path: /
+              pathType: Prefix
+      tls: []
+service1:
+  replicas: 1
 # service2:
 #   image: myservice2:latest
 #   replicas: 2

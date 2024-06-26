@@ -14,15 +14,15 @@ spec:
     spec:
       containers:
         - name: rabbitmq
-          image: "{{ .Values.rabbitmq.image }}"
+          image: "{{ .Values.global.rabbitmq.image }}"
           env:
             - name: RABBITMQ_DEFAULT_USER
-              value: "{{ .Values.rabbitmq.username }}"
+              value: "{{ .Values.global.rabbitmq.username }}"
             - name: RABBITMQ_DEFAULT_PASS
-              value: "{{ .Values.rabbitmq.password }}"
+              value: "{{ .Values.global.rabbitmq.password }}"
           ports:
-            - containerPort: {{ .Values.rabbitmq.service.port }}
-            - containerPort: {{ .Values.rabbitmq.service.managementPort }}
+            - containerPort: {{ .Values.global.rabbitmq.service.port }}
+            - containerPort: {{ .Values.global.rabbitmq.service.managementPort }}
 
 ---
 apiVersion: v1
@@ -33,27 +33,27 @@ spec:
   type: ClusterIP
   ports:
     - name: connection-port
-      port: {{ .Values.rabbitmq.service.port }}
-      targetPort: {{ .Values.rabbitmq.service.port }}
+      port: {{ .Values.global.rabbitmq.service.port }}
+      targetPort: {{ .Values.global.rabbitmq.service.port }}
     - name: management-port
-      port: {{ .Values.rabbitmq.service.managementPort }}
-      targetPort: {{ .Values.rabbitmq.service.managementPort }}
+      port: {{ .Values.global.rabbitmq.service.managementPort }}
+      targetPort: {{ .Values.global.rabbitmq.service.managementPort }}
   selector:
     app: rabbitmq
 ---
 
-{{- if .Values.rabbitmq.ingress.enabled -}}
+{{- if .Values.global.rabbitmq.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: rabbitmq
   annotations:
-    {{- range $key, $value := .Values.rabbitmq.ingress.annotations }}
+    {{- range $key, $value := .Values.global.rabbitmq.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
   rules:
-    {{- range .Values.rabbitmq.ingress.hosts }}
+    {{- range .Values.global.rabbitmq.ingress.hosts }}
     - host: {{ .host }}
       http:
         paths:
@@ -64,12 +64,12 @@ spec:
               service:
                 name: rabbitmq
                 port:
-                  number: {{ $.Values.rabbitmq.service.managementPort }}
+                  number: {{ $.Values.global.rabbitmq.service.managementPort }}
           {{- end }}
     {{- end }}
-  {{- if .Values.rabbitmq.ingress.tls }}
+  {{- if .Values.global.rabbitmq.ingress.tls }}
   tls:
-    {{- range .Values.rabbitmq.ingress.tls }}
+    {{- range .Values.global.rabbitmq.ingress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . }}

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fetcher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fetcher
+  template:
+    metadata:
+      labels:
+        app: fetcher
+    spec:
+      containers:
+        - name: fetcher
+          image: "go-fetcher:latest"
+          imagePPullPolicy: Never
+          env:
+            - name: AMQP_URL
+              value: "amqp://{{ .Values.global.rabbitmq.username }}:{{ .Values.global.rabbitmq.password }}@rabbitmq.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.global.rabbitmq.service.port }}/{{ .Values.global.rabbitmq.vhost | default "/" }}"

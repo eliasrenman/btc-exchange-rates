@@ -1,2 +1,4 @@
 .env
 Values.yaml
+Chart.lock
+*.tgz

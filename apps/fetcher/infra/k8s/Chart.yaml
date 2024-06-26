@@ -1,0 +1,5 @@
+apiVersion: v2
+name: fetcher-chart
+description: A Helm chart for deploying the fetcher service.
+version: 0.1.0
+appVersion: "1.0"
