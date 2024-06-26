@@ -23,16 +23,3 @@ global:
             - path: /
               pathType: Prefix
       tls: []
-service1:
-  replicas: 1
-# service2:
-#   image: myservice2:latest
-#   replicas: 2
-#   service:
-#     port: 8082
-
-# service3:
-#   image: myservice3:latest
-#   replicas: 1
-#   service:
-#     port: 8081

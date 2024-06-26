@@ -20,10 +20,13 @@ func mainLoop() {
 		sekRate := rates["SEK"]
 		log.Println("latest rate", sekRate)
 
-		publishToExchangeRate(ExchangeRateMessage{
+		err = publishToExchangeRate(ExchangeRateMessage{
 			Currency: sekRate.Symbol,
 			Rate:     sekRate.Last,
 		})
+		if err != nil {
+			log.Println("Failed to publish to exchange", err)
+		}
 
 		time.Sleep(time.Minute)
 	}

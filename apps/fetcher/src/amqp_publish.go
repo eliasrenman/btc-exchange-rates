@@ -38,6 +38,21 @@ func publishToExchangeRate(message ExchangeRateMessage) error {
 		return err
 	}
 
+	queue, err := ch.QueueDeclare(
+		"exchange-rate-queue", // name
+		true,                  // durable
+		false,                 // delete when unused
+		false,                 // exclusive
+		false,                 // no-wait
+		nil,                   // arguments
+	)
+
+	err = ch.QueueBind(queue.Name, "", "exchange-rate", false, nil)
+
+	if err != nil {
+		return err
+	}
+
 	// Serialize the message to JSON
 	body, err := json.Marshal(message)
 	if err != nil {

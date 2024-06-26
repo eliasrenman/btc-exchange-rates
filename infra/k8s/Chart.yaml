@@ -7,9 +7,6 @@ dependencies:
   - name: fetcher-chart
     version: "0.1.0"
     repository: "file://../../apps/fetcher/infra/k8s"
-# - name: service2-chart
-#   version: "0.1.0"
-#   repository: "file://../../apps/service2/infra/k8s/service2-chart"
-# - name: service3-chart
-#   version: "0.1.0"
-#   repository: "file://../../apps/service3/infra/k8s/service3-chart"
+  - name: storage-chart
+    version: "0.1.0"
+    repository: "file://../../apps/storage/infra/k8s"

@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fetcher
+  name: storage
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: fetcher
+      app: storage
   template:
     metadata:
       labels:
-        app: fetcher
+        app: storage
     spec:
       containers:
-        - name: fetcher
-          image: "go-fetcher:latest"
+        - name: storage
+          image: "go-storage:latest"
           imagePullPolicy: Never
           env:
             - name: AMQP_URL
