@@ -10,3 +10,6 @@ dependencies:
   - name: storage-chart
     version: "0.1.2"
     repository: "file://../../apps/storage/infra/k8s"
+  - name: server-chart
+    version: "0.1.0"
+    repository: "file://../../apps/server/infra/k8s"

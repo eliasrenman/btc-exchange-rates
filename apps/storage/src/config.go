@@ -16,6 +16,6 @@ func init() {
 
 	POSTGRES_CONNECTION = os.Getenv("DATABASE_URL")
 	if POSTGRES_CONNECTION == "" {
-		log.Fatal("POSTGRES_CONNECTION environment variable not set")
+		log.Fatal("DATABASE_URL environment variable not set")
 	}
 }
