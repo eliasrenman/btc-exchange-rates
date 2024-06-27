@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+        - name: server
+          image: "go-server:latest"
+          imagePullPolicy: Never
+          env:
+            - name: DATABASE_URL
+              value: "postgres://{{ .Values.global.postgresql.username }}:{{ .Values.global.postgresql.password }}@postgresql.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.global.postgresql.service.port }}/{{ .Values.global.postgresql.database}}"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server
+spec:
+  type: ClusterIP
+  ports:
+    - name: serve-port
+      port: {{ .Values.global.server.service.port }}
+      targetPort: 3000
+  selector:
+    app: server
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: server
+  annotations:
+    {{- range $key, $value := .Values.global.server.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- range .Values.global.server.ingress.hosts }}
+    - host: {{ .host }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
+            backend:
+              service:
+                name: server
+                port:
+                  number: {{ $.Values.global.server.service.port }}
+          {{- end }}
+    {{- end }}
+  tls:
+    {{- range .Values.global.server.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
