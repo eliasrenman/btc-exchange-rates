@@ -19,3 +19,5 @@ spec:
           env:
             - name: AMQP_URL
               value: "amqp://{{ .Values.global.rabbitmq.username }}:{{ .Values.global.rabbitmq.password }}@rabbitmq.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.global.rabbitmq.service.port }}/{{ .Values.global.rabbitmq.vhost | default "/" }}"
+            - name: DATABASE_URL
+              value: "postgres://{{ .Values.global.postgresql.username }}:{{ .Values.global.postgresql.password }}@postgresql.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.global.postgresql.service.port }}/{{ .Values.global.postgresql.database}}"

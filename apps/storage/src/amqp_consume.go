@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -58,6 +59,12 @@ func startConsumer() {
 		for msg := range msgs {
 			fmt.Printf("Received a message: %s\n", msg.Body)
 			// Process the exchange rate update here
+			var result ExchangeRateMessage
+			if err := json.Unmarshal(msg.Body, &result); err != nil {
+				log.Fatalln("Failed unwrapping message body, error:", err)
+				continue
+			}
+			insertRow(result)
 		}
 	}()
 

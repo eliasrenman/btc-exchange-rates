@@ -1,6 +1,6 @@
 global:
   postgresql:
-    image: "postgres:13"
+    image: "postgres:latest"
     username: "admin"
     password: "${POSTGRES_PASSWORD}"
     database: "mydb"
